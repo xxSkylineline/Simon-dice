@@ -1,0 +1,22 @@
+
+.cuadrado{
+  width: 50%;
+  height: 150px;
+}
+
+.opacidad-baja{
+  opacity: 0.5;
+}
+
+.rojo {
+  background-color: red;
+}
+.azul {
+  background-color: blue;
+}
+.amarillo {
+  background-color: yellow;
+}
+.verde {
+  background-color: green;
+}
