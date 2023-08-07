@@ -4,6 +4,20 @@ const $cuadros = document.querySelectorAll(".cuadrado");
 const $iniciador = document.querySelector("#iniciador");
 let numeroDeRonda = 0;
 let segundos = 1000;
+
+
+$iniciador.onclick = iniciaJuego;
+
+function iniciaJuego() {
+
+
+  $iniciador.disabled = true;
+  setTimeout(()=>{
+    TurnoMaquina()
+  }, segundos )
+  ;
+}
+
 function cambiaMensaje(mensaje) {
   let $titulo = document.querySelector("#titulo");
   $titulo.textContent = mensaje;
