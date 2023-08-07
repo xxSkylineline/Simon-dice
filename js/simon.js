@@ -1,3 +1,9 @@
+const secuenciaMaquina = [];
+const secuenciaJugador = [];
+const $cuadros = document.querySelectorAll(".cuadrado");
+const $iniciador = document.querySelector("#iniciador");
+let numeroDeRonda = 0;
+let segundos = 1000;
 function cambiaMensaje(mensaje) {
   let $titulo = document.querySelector("#titulo");
   $titulo.textContent = mensaje;
