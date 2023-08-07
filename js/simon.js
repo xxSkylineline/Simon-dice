@@ -24,6 +24,7 @@ function cambiaMensaje(mensaje) {
 }
 
 function secuenciaSimon(numeroDeRonda) {
+function secuenciaSimon() {
   valorNuevoASecuencia = Math.floor(Math.random() * $cuadros.length);
   secuenciaMaquina.push(valorNuevoASecuencia);
   console.log(secuenciaMaquina);
@@ -32,11 +33,15 @@ function secuenciaSimon(numeroDeRonda) {
 function TurnoMaquina() {
   numeroDeRonda += 1;
   let segundos = 1000;
+  numeroDeRonda ++;
+
+  let milisegundosDeRetraso = 1000;
   cambiaMensaje("TURNO MAQUINA");
   secuenciaSimon(numeroDeRonda);
   bloquearUsuario();
   secuenciaMaquina.forEach(function (elemento, i) {
     iluminaOpacaCuadro($cuadros[elemento], i);
+    resaltaCuadro($cuadros[elemento], i);
   });
   setTimeout(() => {
     turnoUsuario();
@@ -47,12 +52,20 @@ function bloquearUsuario() {
   $cuadros.forEach(function (cuadro) {
     cuadro.onclick = function () {};
   });
+  }, secuenciaMaquina.length * milisegundosDeRetraso);
 }
 
 function turnoUsuario() {
   const secuenciaJugador = [];
   let tiempoDeEspera = 0;
+  let esCorrecto;
+  
+  cambiaMensaje("TURNO USUARIO");
 
+  $cuadros.forEach(function(cuadro, index){
+    cuadro.onclick = function(){
+      esCorrecto = true;
+      let posicionCuadro;
 
   $cuadros.forEach(function (cuadro, index) {
     cambiaMensaje("TURNO USUARIO");
@@ -65,12 +78,23 @@ function turnoUsuario() {
       if (secuenciaJugador[index] != secuenciaMaquina[index]) {
         finDeJuego();
         bloquearUsuario();
+      posicionCuadro = secuenciaJugador[secuenciaJugador.length-1]
+      resaltaCuadro($cuadros[posicionCuadro], tiempoDeEspera)
+      
+      if(secuenciaJugador[secuenciaJugador.length-1] !== secuenciaMaquina[secuenciaJugador.length-1]){
+        finDeJuego()
+        esCorrecto = false
       }
 
       if (secuenciaJugador.length == secuenciaMaquina.length) {
         setTimeout(() => {
           TurnoMaquina();
         }, numeroDeRonda * 1000);
+    
+      if(secuenciaJugador.length == secuenciaMaquina.length && esCorrecto == true){
+        setTimeout(()=>{
+          TurnoMaquina()
+        }, 1000)
       }
       console.log(secuenciaJugador[index] === secuenciaJugador[index])
     });
@@ -84,6 +108,7 @@ function turnoUsuario() {
       console.log("FIN DE JUEGO")
     } */
     console.log("secuencia JUGADOR" + secuenciaJugador);
+    }
   });
 }
 
@@ -98,8 +123,16 @@ $iniciador.onclick = iniciaJuego;
 
 function iniciaJuego() {
   $iniciador.disabled = true;
+function resaltaCuadro(elemento, i) {
+  let segundoDeEspera = 0.5;
 
   TurnoMaquina();
+  setTimeout(() => {
+    iluminarCuadro(elemento);
+  }, segundos * i);
+  setTimeout(() => {
+    opacarCuadro(elemento);
+  }, segundos * (i + segundoDeEspera));
 }
 
 function iluminarCuadro(elemento) {
@@ -112,6 +145,11 @@ function opacarCuadro(elemento) {
 
 function iluminaOpacaCuadro(elemento, i) {
   let segundoDeEspera = 0.5;
+function bloquearUsuario() {
+  $cuadros.forEach(function (cuadro) {
+    cuadro.onclick = function () {};
+  });
+}
 
   setTimeout(() => {
     iluminarCuadro(elemento);
@@ -119,6 +157,20 @@ function iluminaOpacaCuadro(elemento, i) {
   setTimeout(() => {
     opacarCuadro(elemento);
   }, segundos * (i + segundoDeEspera));
+function interaccionUsuario(indice) {
+  let esCorrecto = true;
+  secuenciaJugador.push(indice);
+  resaltaCuadro($cuadros[indice])
+
+  if(secuenciaJugador[secuenciaJugador.length-1] !== secuenciaMaquina[secuenciaJugador.length-1]){
+    finDeJuego()
+  }
+
+  if(secuenciaJugador.length == secuenciaMaquina.length){
+    setTimeout(()=>{
+      TurnoMaquina()
+    }, 1000)
+  }
 }
 
 function compruebaError(secuenciaJugador, i) {
@@ -127,6 +179,10 @@ function compruebaError(secuenciaJugador, i) {
     esCorrecto = true;
   }
   return esCorrecto;
+}
+
+function agregaPasoASecuenciaJugador(secuenciaJugador,index){
+  secuenciaJugador.push(index)
 }
 
 function finDeJuego() {
